@@ -1,0 +1,143 @@
+[progression]
+	# Default: 30
+	# Range: > 1
+	levelBaseXp = 30
+	# Default: 15
+	# Range: > 0
+	levelStepXp = 15
+	# Default: 5
+	# Range: 1 ~ 100
+	syncIntervalTicks = 5
+
+[stats]
+	# Default: 20.0
+	# Range: 1.0 ~ 1024.0
+	healthBase = 20.0
+	# Default: 4.0
+	# Range: 0.0 ~ 256.0
+	healthPerPoint = 4.0
+	# Default: 100.0
+	# Range: 1.0 ~ 4096.0
+	staminaBase = 100.0
+	# Default: 15.0
+	# Range: 0.0 ~ 512.0
+	staminaPerPoint = 15.0
+	# Default: 100.0
+	# Range: 1.0 ~ 4096.0
+	oxygenBase = 100.0
+	# Default: 20.0
+	# Range: 0.0 ~ 512.0
+	oxygenPerPoint = 20.0
+	# Default: 100.0
+	# Range: 1.0 ~ 4096.0
+	foodBase = 100.0
+	# Default: 15.0
+	# Range: 0.0 ~ 512.0
+	foodPerPoint = 15.0
+	# Default: 100.0
+	# Range: 1.0 ~ 4096.0
+	waterBase = 100.0
+	# Default: 15.0
+	# Range: 0.0 ~ 512.0
+	waterPerPoint = 15.0
+	# Default: 200.0
+	# Range: 1.0 ~ 100000.0
+	weightBase = 200.0
+	# Default: 25.0
+	# Range: 0.0 ~ 4096.0
+	weightPerPoint = 25.0
+	# Default: 0.08
+	# Range: 0.0 ~ 10.0
+	meleePerPoint = 0.08
+	# Default: 0.025
+	# Range: 0.0 ~ 10.0
+	speedPerPoint = 0.025
+	# Default: 5
+	# Range: 0 ~ 1024
+	stepThreshold = 5
+
+[stamina]
+	# Default: 0.18
+	# Range: 0.0 ~ 128.0
+	sprintDrainPerTick = 0.18
+	# Default: 0.75
+	# Range: 0.0 ~ 128.0
+	bowDrainPerTick = 0.75
+	# Default: 1.75
+	# Range: 0.0 ~ 128.0
+	idleRegenPerTick = 1.75
+	# Default: 0.4
+	# Range: 0.0 ~ 128.0
+	walkRegenPerTick = 0.4
+	# Default: 8.0
+	# Range: 0.0 ~ 128.0
+	jumpDrain = 8.0
+	# Default: 2.0
+	# Range: 0.0 ~ 128.0
+	bowBreakDamage = 2.0
+
+[oxygen]
+	# Default: 0.6
+	# Range: 0.0 ~ 128.0
+	underwaterDrainPerTick = 0.6
+	# Default: 1.5
+	# Range: 0.0 ~ 128.0
+	regenPerTick = 1.5
+
+[food]
+	# Default: 0.002
+	# Range: 0.0 ~ 16.0
+	passiveDrainPerTick = 0.002
+	# Default: 0.035
+	# Range: 0.0 ~ 16.0
+	sprintDrainPerTick = 0.035
+	# Default: 1.5
+	# Range: 0.0 ~ 64.0
+	jumpDrain = 1.5
+	# Default: 0.1
+	# Range: 0.0 ~ 4.0
+	efficiencyPerPoint = 0.1
+	# Default: 2.0
+	# Range: 0.0 ~ 64.0
+	regenCost = 2.0
+	# Default: 1.0
+	# Range: 0.0 ~ 64.0
+	regenHeal = 1.0
+
+[water]
+	# Default: 0.003
+	# Range: 0.0 ~ 16.0
+	passiveDrainPerTick = 0.003
+	# Default: 0.045
+	# Range: 0.0 ~ 16.0
+	sprintDrainPerTick = 0.045
+	# Default: 0.4
+	# Range: 0.0 ~ 64.0
+	jumpDrain = 0.4
+	# Default: 0.08
+	# Range: 0.0 ~ 64.0
+	fireDrainPerTick = 0.08
+	# Default: 25.0
+	# Range: 0.0 ~ 512.0
+	waterBottleRestore = 25.0
+	# Default: 18.0
+	# Range: 0.0 ~ 512.0
+	waterSourceRestore = 18.0
+	# Default: 15.0
+	# Range: 0.0 ~ 4096.0
+	lowThreshold = 15.0
+
+[weight]
+	# Default: 1.0
+	# Range: 0.0 ~ 4096.0
+	defaultItemWeight = 1.0
+	# Default: 0.5
+	# Range: 0.0 ~ 4096.0
+	lightItemWeight = 0.5
+	# Default: 2.0
+	# Range: 0.0 ~ 4096.0
+	mediumItemWeight = 2.0
+	# Default: 5.0
+	# Range: 0.0 ~ 4096.0
+	heavyItemWeight = 5.0
+	itemWeightOverrides = ["minecraft:shulker_box=12.0"]

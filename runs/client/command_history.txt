@@ -1,0 +1,20 @@
+/gamemode spectator
+/gamemode survival
+/xp add @a 1000 points
+/xp add @a 1000 levels
+/effect give Dev minecraft:hunger infinite 255
+/clear
+/xp add @a 1000 points
+/clear
+/
+/clear
+/effect clear
+/ark addpoint 20 Dev
+/ark refill
+/ark respec
+/ark addpoint 20 Dev
+/ark setpoint 5000 Dev
+/effect give Dev minecraft:hunger infinite 255
+/effect clear Dev
+/time set day
+/ark respec

@@ -33,6 +33,83 @@ base {
     archivesName = mod_id
 }
 
+// Work around flaky Gradle downloads for Minecraft executable jars in this environment.
+def minecraftVersionCacheDir = layout.projectDirectory.dir(".gradle/caches/minecraft/versions/${minecraft_version}")
+def minecraftMetadataFile = minecraftVersionCacheDir.file("metadata.json").asFile
+
+def sha1Hex = { File file ->
+    def digest = java.security.MessageDigest.getInstance('SHA-1')
+    file.withInputStream { input ->
+        byte[] buffer = new byte[8192]
+        int read
+        while ((read = input.read(buffer)) != -1) {
+            digest.update(buffer, 0, read)
+        }
+    }
+    digest.digest().collect { String.format('%02x', it) }.join()
+}
+
+def ensureMinecraftExecutableJar = { Project proj, String artifactName ->
+    def json = new groovy.json.JsonSlurper().parse(minecraftMetadataFile)
+    def download = json.downloads[artifactName]
+    def outputFile = minecraftVersionCacheDir.file("${artifactName}.jar").asFile
+    def expectedSize = (download.size as Number).longValue()
+    def expectedSha1 = download.sha1.toString()
+
+    if (outputFile.exists() && outputFile.length() == expectedSize && sha1Hex(outputFile) == expectedSha1) {
+        return
+    }
+
+    outputFile.parentFile.mkdirs()
+    if (outputFile.exists() && !outputFile.delete()) {
+        throw new GradleException("Failed to delete invalid ${artifactName}.jar at ${outputFile}")
+    }
+
+    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+    def curlArgs = ['-L', '--retry', '100', '--retry-delay', '5', '--retry-all-errors', '--tlsv1.2', '--silent', '--show-error']
+    if (isWindows) {
+        curlArgs += '--ssl-no-revoke'
+    }
+    curlArgs += ['--output', outputFile.absolutePath, download.url.toString()]
+
+    def execResult = proj.providers.exec {
+        executable = isWindows ? 'curl.exe' : 'curl'
+        args = curlArgs
+    }.result.get()
+    execResult.assertNormalExitValue()
+
+    if (!outputFile.exists() || outputFile.length() != expectedSize || sha1Hex(outputFile) != expectedSha1) {
+        throw new GradleException("Failed to provision ${artifactName}.jar at ${outputFile}")
+    }
+}
+
+tasks.register('ensureMinecraftClientJar') {
+    dependsOn "cacheVersionManifest${minecraft_version}"
+    doLast {
+        ensureMinecraftExecutableJar(project, 'client')
+    }
+}
+
+tasks.register('ensureMinecraftServerJar') {
+    dependsOn "cacheVersionManifest${minecraft_version}"
+    doLast {
+        ensureMinecraftExecutableJar(project, 'server')
+    }
+}
+
+gradle.projectsEvaluated {
+    def clientTask = tasks.findByName("cacheVersionExecutableClient${minecraft_version}")
+    if (clientTask != null) {
+        clientTask.dependsOn(tasks.named('ensureMinecraftClientJar'))
+        clientTask.onlyIf { false }
+    }
+
+    def serverTask = tasks.findByName("cacheVersionExecutableServer${minecraft_version}")
+    if (serverTask != null) {
+        serverTask.dependsOn(tasks.named('ensureMinecraftServerJar'))
+        serverTask.onlyIf { false }
+    }
+}
 // Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
@@ -139,6 +216,8 @@ tasks.withType(ProcessResources).configureEach {
             mod_name               : mod_name,
             mod_license            : mod_license,
             mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
     ]
     inputs.properties replaceProperties
 
@@ -172,3 +251,4 @@ idea {
         downloadJavadoc = true
     }
 }
+
